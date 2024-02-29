@@ -8,7 +8,7 @@ const ClassSchema = new mongoose.Schema({ // mongoose schema es un objeto que de
     subject_id: {
         type: mongoose.Schema.Types.ObjectId, // mongoose.Schema.Types.ObjectId es un tipo de dato que se utiliza para referenciar un documento en otra colección.
         ref: 'Subject', 
-        /* required: true */ // cambiar a true cuando se creen las asginaturas
+        required: true,
     },
     students: [{ // esto es un array de objetos
         type: mongoose.Schema.Types.ObjectId,

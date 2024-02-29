@@ -29,6 +29,14 @@ const StudentSchema = new mongoose.Schema({
         ref: 'Warnings',
         default: null
     },
+
+    subject_ids: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subject',
+        default: null
+    },
+    
+
     w_comments: String
 
 });

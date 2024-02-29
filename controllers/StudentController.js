@@ -9,7 +9,10 @@ const addStudent = async (req, res) => {
             class_id,
             contact_person,
             cp_email,
-            w_comments
+            warnings,
+            w_comments,
+            subject_ids
+
         });
 
         await newStudent.save();
