@@ -21,6 +21,6 @@ const TeacherSchema = new mongoose.Schema({ // new is a keyword to create a new 
         required: true },
 });
 
-const Teacher = mongoose.model('Teacher', TeacherSchema);
+const TeacherModel = mongoose.model('Teacher', TeacherSchema);
 
-export default Teacher;
+export default TeacherModel;
