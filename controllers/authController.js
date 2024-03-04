@@ -1,9 +1,9 @@
-import Teacher from "../models/TeacherModel.js";
+import TeacherModel from "../models/TeacherModel.js";
 
 const registerTeacher = async (req, res) => {
     try {
         const { name, first_name, email, subjects, password } = req.body; // Destructuring the request body
-        const teacher = new Teacher({ name, first_name, email, subjects, password }); 
+        const teacher = new TeacherModel({ name, first_name, email, subjects, password }); 
         await teacher.save();
         res.status(201).json({message: 'New teacher registered, JAY!', teacher});
     } catch (error) {

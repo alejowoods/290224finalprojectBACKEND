@@ -19,8 +19,12 @@ const TeacherSchema = new mongoose.Schema({ // new is a keyword to create a new 
 
     password: { type: String, 
         required: true },
+    subject_ids: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subject'
+    }]
 });
 
-const Teacher = mongoose.model('Teacher', TeacherSchema);
+const TeacherModel = mongoose.model('Teacher', TeacherSchema);
 
-export default Teacher;
+export default TeacherModel;
