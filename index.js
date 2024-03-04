@@ -7,8 +7,7 @@ import studentRouter from './routers/studentRoutes.js';
 import subjectRouter from './routers/subjectRoutes.js'; 
 import warningRouter from './routers/warningRoutes.js';
 
-import ClassRouter from './routers/classRoutes.js'; // !!!	NEEDS TO BE CHANGED
-
+import ClassRouter from './routers/classRoutes.js'; 
 
 const app = express();
 const port = process.env.PORT;

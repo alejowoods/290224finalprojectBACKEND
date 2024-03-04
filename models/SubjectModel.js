@@ -10,9 +10,13 @@ const SubjectSchema = new mongoose.Schema({
         ref: 'Teacher',
         required: true 
     },
-    student_ids: {
+    student_ids: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student',
+    }],
+    class_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Class'  
     }
 });
 
