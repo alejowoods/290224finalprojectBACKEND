@@ -24,20 +24,19 @@ const StudentSchema = new mongoose.Schema({
             message: 'No way José, this is not a valid email address. Try again!'
         }
     },
-    warnings: {
+    warning_ids:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Warnings',
         default: null
-    },
+    }],
 
-    subject_ids: {
+    subject_ids: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Subject',
         default: null
-    },
+    }],
     
 
-    w_comments: String
 
 });
 

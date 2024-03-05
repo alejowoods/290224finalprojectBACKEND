@@ -2,15 +2,14 @@ import Student from '../models/StudentModel.js';
 
 const addStudent = async (req, res) => {
     try {
-        const {name, class_id, contact_person, cp_email, w_comments } = req.body;
+        const {name, class_id, contact_person, cp_email, warning_ids, subject_ids } = req.body;
 
         const newStudent = new Student({
             name,
             class_id,
             contact_person,
             cp_email,
-            warnings,
-            w_comments,
+            warning_ids,
             subject_ids
 
         });
@@ -24,6 +23,8 @@ const addStudent = async (req, res) => {
         res.status(500).json({ message: 'Houston, we have a problem...! (internal server error)' });
     }
 };
+
+
 
 
 export default addStudent;
