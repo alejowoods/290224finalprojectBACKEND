@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());
-app.use('/auth', validateTeacherRegistration, authRoutes); // !!!
+app.use('/auth', validateTeacherRegistration, authRoutes);
 app.use('/teachers', teacherRouter);
 app.use('/students', studentRouter); 
 app.use('/subjects', subjectRouter); 
