@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const TeacherSchema = new mongoose.Schema({ // new is a keyword to create a new instance of a class
+const TeacherSchema = new mongoose.Schema({ 
     name : {
         type: String,
         required: true
