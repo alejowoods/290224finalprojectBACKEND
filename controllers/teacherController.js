@@ -5,11 +5,48 @@ import ClassModel from "../models/ClassModel.js";
 
 const getTeacherInfo = async (req, res) => {
     try {
-        const teachers = await TeacherModel.find(); // Teacher representa la coleccion de datos y find() es un metodo de mongoose para buscar todos los datos
-        res.status(200).json({ teachers });
+        const { id } = req.params;
+        console.log('Received Teacher ID:', id);
+
+        const teacher = await TeacherModel.findById(id);
+        if(!teacher) {
+            return res.status(404).json({ message: 'Teacher not found' });
+        }
+        res.status(200).json({ teacher });
     } catch (error) {
-        console.error('Houston...! Error fetching dashboard data:', error);
-        res.status(500).json({ message: 'Houston, we have a problem...! (internal server error)' });
+        console.error('Houston...! Error fetching teacher info:', error);
+        res.status(500).json({ message: 'GAME OVER, MATE (internal server error)' });
+    }
+};
+
+const assignSubjectToTeacher = async (req, res) => {
+    try {
+        const { subjectName } = req.body;
+        const { teacherID } = req.params;
+
+        const teacher = await TeacherModel.findById(teacherID);
+        if(!teacher) {
+            return res.status(404).json({ message: 'Teacher not found' });
+        }
+
+        const existingSubject = await SubjectModel.findOne({ subject_name: subjectName});
+        if(existingSubject) {
+            return res.status(400).json({ message: 'Subject already exists, teacher!'})
+        };
+
+        const newSubject = new SubjectModel({
+            subject_name: subjectName, 
+            teacher_id: teacherID
+        }); 
+
+        await newSubject.save();
+        teacher.subject_ids.push(newSubject._id);
+        await teacher.save();
+        res.status(201).json({ message: 'New subject added to the teacher!', newSubject });
+
+    } catch (error) {
+        console.error('Houston...! Error adding new subject:', error);
+        res.status(500).json({ message: 'NOT YOUR FAULT, MATE (internal server error)' });
     }
 };
 
@@ -103,4 +140,4 @@ const getSubjectsForTeacher = async (req, res) => {
     }
 };
 
-export { getTeacherInfo, assignSubjectToClassAndTeacher, deleteSubjectFromClassAndTeacher, getSubjectsForTeacher  };
+export { getTeacherInfo, assignSubjectToClassAndTeacher, deleteSubjectFromClassAndTeacher, getSubjectsForTeacher, assignSubjectToTeacher  };

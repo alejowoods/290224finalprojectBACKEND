@@ -63,4 +63,31 @@ const assignSubjectToClass = async (req, res) => {
         res.status(500).json({ message: 'GAME OVER! INSERT COIN  AND TRY AGAIN (internal server error)' });
     }
 }
-export {createClass, assignSubjectToClass};
+
+const addStudentsToClass = async (req, res) => {
+
+    const { classID, studentIDs } = req.body;
+    try {
+        
+        const classInstance = await ClassModel.findById(classID);
+        if (!classInstance) {
+            return res.status(404).json({ message: 'Class not found' });
+        }
+        
+        studentIDs.forEach(studentID => {
+            if (!classInstance.students.includes(studentID)) {
+                classInstance.students.push(studentID);
+            }
+        });
+
+        await classInstance.save();
+        res.status(200).json({ message: 'Students added to class', classInstance });
+
+    } catch (error) {
+        console.error('Houston...! Error adding students to class:', error);
+        res.status(500).json({ message: 'GAME OVER, MATE; INSERT COIN AND PLAY AGAIN: (internal server error)' });
+    }
+}
+
+
+export {createClass, assignSubjectToClass, addStudentsToClass};
