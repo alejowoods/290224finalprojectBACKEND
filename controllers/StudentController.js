@@ -1,5 +1,7 @@
 import Student from '../models/StudentModel.js';
 import Class from '../models/ClassModel.js';
+import Subject from '../models/SubjectModel.js';
+import WarningModel from '../models/WarningModel.js';
 
 const addStudent = async (req, res) => {
     try {
@@ -27,8 +29,11 @@ const addStudent = async (req, res) => {
 
 const editStudent = async (req, res) => {
     try {
-        const { student_id, name, class_id, contact_person, cp_email, warning_ids, subject_ids } = req.body;
-        const student = await Student.findById(student_id);
+        const { name, class_id, contact_person, cp_email, warning_ids, subject_ids } = req.body;
+        const { id } = req.params;
+        console.log('student_id:', id);
+        const student = await Student.findById(id);
+        console.log('student_id:', student);
 
         if(!student) {
             return res.status(404).json({ message: 'Student not found: either it is a good student or you made a mistake (normally number 2)' });
@@ -81,6 +86,31 @@ const getStudentsInfo = async (req, res) => {
     }
 }; 
 
+const addStudentsToClass = async (req, res) => {
+    
+        const { classID, studentIDs } = req.body;
+        try {
+            
+            const classInstance = await Class.findById(classID);
+            if (!classInstance) {
+                return res.status(404).json({ message: 'Class not found' });
+            }
+            
+            studentIDs.forEach(studentID => {
+                if (!classInstance.students.includes(studentID)) {
+                    classInstance.students.push(studentID);
+                }
+            });
+    
+            await classInstance.save();
+            res.status(200).json({ message: 'Students added to class', classInstance });
+    
+        } catch (error) {
+            console.error('Houston...! Error adding students to class:', error);
+            res.status(500).json({ message: 'GAME OVER, MATE; INSERT COIN AND PLAY AGAIN: (internal server error)' });
+        }
+};
+
 const addStudentsToSubjectAndClass = async (req, res) => {
     const { classID, subjectID, studentIDs } = req.body;
     try {
@@ -122,8 +152,7 @@ const getStudentsBySubjectAndClass = async (req, res) => {
             class_id: classID, 
             subject_ids: { $in: [subjectID] } 
         })
-        .populate('class_id') 
-        .populate('warning_ids')
+        .populate('class_id') // why without .populate('warning_ids')
         .populate('subject_ids');
         res.status(200).json({ students }); 
     } catch (error) {
@@ -132,6 +161,39 @@ const getStudentsBySubjectAndClass = async (req, res) => {
     }
 };
 
+const deleteStudentFromSubject = async (req, res) => {
+    const { studentID, classID, subjectID } = req.body;
+    try {
+        const student = await Student.findById(studentID);
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
 
+        const subjectInstance = await Subject.findById(subjectID);
+        if (!subjectInstance) {
+            return res.status(404).json({ message: 'Subject not found' });
+        } else {
+            subjectInstance.student_ids = subjectInstance.student_ids.filter(student => student.toString() !== studentID);
+            await subjectInstance.save();
+        }
 
-export {addStudent, getStudentsInfo, getStudentsBySubjectAndClass, editStudent, deleteStudent, addStudentsToSubjectAndClass};
+        student.subject_ids = student.subject_ids.filter(subject => subject.toString() !== subjectID);
+        await student.save();
+        
+        res.status(200).json({ message: 'Student removed from subject', student });
+
+    } catch (error) {
+        console.error('Houston...! Error removing student from subject:', error);
+        res.status(500).json({ message: 'GAME OVER! INSERT COIN  AND TRY AGAIN (internal server error)' });
+    }
+};
+
+export {addStudent, 
+    getStudentsInfo, 
+    getStudentsBySubjectAndClass, 
+    editStudent, 
+    deleteStudent, 
+    addStudentsToSubjectAndClass, 
+    addStudentsToClass, 
+    deleteStudentFromSubject
+};
