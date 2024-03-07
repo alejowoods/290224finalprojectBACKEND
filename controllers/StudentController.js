@@ -152,7 +152,8 @@ const getStudentsBySubjectAndClass = async (req, res) => {
             class_id: classID, 
             subject_ids: { $in: [subjectID] } 
         })
-        .populate('class_id') // why without .populate('warning_ids')
+        .populate('class_id')
+        .populate('warning_ids') 
         .populate('subject_ids');
         res.status(200).json({ students }); 
     } catch (error) {

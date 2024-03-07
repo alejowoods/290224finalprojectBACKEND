@@ -6,6 +6,7 @@ const studentRouter = express.Router();
 studentRouter.post('/add', addStudent);
 studentRouter.get('/info', getStudentsInfo);    
 studentRouter.get('/:classID/:subjectID', getStudentsBySubjectAndClass);
+
 studentRouter.put('/update/:id', editStudent);
 studentRouter.delete('/delete/:id', deleteStudent);
 studentRouter.put('/addStudentsToSubjectAndClass', addStudentsToSubjectAndClass);

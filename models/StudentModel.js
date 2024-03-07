@@ -26,7 +26,7 @@ const StudentSchema = new mongoose.Schema({
     },
     warning_ids:[{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Warnings',
+        ref: 'Warning',
         default: null
     }],
 
